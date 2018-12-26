@@ -1,0 +1,27 @@
+$sql = "
+		SELECT
+			* ,  
+			(
+				CASE
+					WHEN TIMESTAMPDIFF(MONTH,time_1,time_2) = 0  THEN 
+						 CONCAT( TIMESTAMPDIFF(MONTH,time_1,time_2) ,'m',  TIMESTAMPDIFF(DAY,time_1,time_2) ,'d' )	
+					WHEN TIMESTAMPDIFF(MONTH,time_1,time_2) >= 12 THEN 
+						 CONCAT(  TIMESTAMPDIFF(YEAR,time_1,time_2) ,'y', CEILING((TIMESTAMPDIFF(MONTH,time_1,time_2)-(TIMESTAMPDIFF(YEAR,time_1,time_2) * 12)) ),'m' )
+					WHEN TIMESTAMPDIFF(MONTH,time_1,time_2) < 12 THEN  
+						 CONCAT(
+							  TIMESTAMPDIFF(MONTH,time_1,time_2) ,'m', 
+								( 
+									TIMESTAMPDIFF(DAY,time_1,time_2)  
+									-  
+									TIMESTAMPDIFF(DAY ,time_1, DATE_ADD(  time_1 , INTERVAL +  (TIMESTAMPDIFF(MONTH,time_1,time_2) ) MONTH )  ) 									
+								) 
+							,'d' )	 
+				
+				END
+                      
+			)AS T 	,
+			TIMESTAMPDIFF(MONTH,time_1,time_2) AS '相差幾個月' ,
+			CEILING((TIMESTAMPDIFF(MONTH,time_1,time_2)/ (TIMESTAMPDIFF(YEAR,time_1,time_2) * 12)) -1 ) AS '相差幾個月-' 
+		 FROM 
+		 	test
+		";
