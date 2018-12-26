@@ -51,7 +51,7 @@ class Common_class
         if ($len == 2) {
             #兩字模式
 
-            return str_replace(mb_substr($string, -1), "O", $string);
+            return str_replace(mb_substr($string, -1), $symbol, $string);
         }
 
     }
