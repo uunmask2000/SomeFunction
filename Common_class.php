@@ -56,6 +56,27 @@ class Common_class
 
     }
 
+    /**
+     * _array_diff 多維比較
+     *
+     * @param  mixed $array_1
+     * @param  mixed $array_2
+     *
+     * @return void
+     */
+    public function _array_diff($array_1, $array_2)
+    {
+        foreach ($array_1 as $key => $item) {
+
+            if (in_array($item, $array_2, true)) {
+                unset($array_1[$key]);
+            }
+        }
+
+        return $array_1;
+
+    }
+
 }
 
 /* End of file Common_class.php */
