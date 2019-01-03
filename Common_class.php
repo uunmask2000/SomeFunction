@@ -128,6 +128,78 @@ class Common_class
         return $strtmp;
     }
 
+    /**
+     * chk_pid 驗證 身分證字號 格式
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
+    public function chk_pid($id)
+    {
+        if (!$id) {
+            return false;
+        }
+
+        if (!$id) {
+            return false;
+        }
+
+        $id = strtoupper(trim($id)); //將英文字母全部轉成大寫，消除前後空白
+        //檢查第一個字母是否為英文字，第二個字元1 2 A~D 其餘為數字共十碼
+        $ereg_pattern = "/^[A-Z]{1}[12ABCD]{1}[[:digit:]]{8}$/";
+        if (!preg_match($ereg_pattern, $id)) {
+            return false;
+        }
+
+        $wd_str = "BAKJHGFEDCNMLVUTSRQPZWYX0000OI"; //關鍵在這行字串
+        $d1 = strpos($wd_str, $id[0]) % 10;
+        $sum = 0;
+        if ($id[1] >= 'A') {
+            $id[1] = chr($id[1]) - 65;
+        }
+        //第2碼非數字轉換依[4]說明處理
+        for ($ii = 1; $ii < 9; $ii++) {
+            $sum += (int) $id[$ii] * (9 - $ii);
+        }
+
+        $sum += $d1 + (int) $id[9];
+        if ($sum % 10 != 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * isDate 判斷日期
+     *
+     * @param  mixed $str
+     *
+     * @return void
+     */
+    public function isDate($str)
+    {
+        return strtotime(date('Y-m-d', strtotime($str))) === strtotime($str);
+
+        // $__y = substr($str, 0, 4);
+        // $__m = substr($str, 5, 2);
+        // $__d = substr($str, 8, 2);
+        // return checkdate($__m, $__d, $__y);
+    }
+
+    /**
+     * isEmail 判斷 Email
+     *
+     * @param  mixed $str
+     *
+     * @return void
+     */
+    public function isEmail($str)
+    {
+        return preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/", $str);
+    }
+
 }
 
 /* End of file Common_class.php */
